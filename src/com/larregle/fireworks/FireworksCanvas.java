@@ -71,6 +71,10 @@ public class FireworksCanvas extends Canvas {
         }
 
         public void update() {
+            for (int i = 0; i < fireworks.size(); i++) {
+                if (fireworks.get(i).isDone())
+                    fireworks.remove(i);
+            }
             if (random.nextDouble() < 0.1) {
                 fireworks.add(new Fireworks());
             }

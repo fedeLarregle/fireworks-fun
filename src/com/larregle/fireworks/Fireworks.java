@@ -42,6 +42,10 @@ public class Fireworks {
         particles.forEach(Particle::update);
     }
 
+    public boolean isDone() {
+        return exploded && particles.size() == 0;
+    }
+
     public void explode() {
         for (int i = 0; i < 100; i++)
             particles.add(new Particle(firework.getPosition().getX(), firework.getPosition().getY(), false, firework.getColor()));
