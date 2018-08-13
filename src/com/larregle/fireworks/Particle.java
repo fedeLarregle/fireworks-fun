@@ -1,7 +1,6 @@
 package com.larregle.fireworks;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
+import java.awt.*;
 import java.util.Random;
 
 public class Particle {
@@ -13,21 +12,43 @@ public class Particle {
     private Vector2D velocity;
     private Vector2D acceleration;
 
-    public Particle(double x, double y) {
-        Random random = new Random();
+    private boolean root;
+    private volatile float lifespan;
+    private final Color color;
+
+    public Particle(double x, double y, boolean root, Color color) {
+        Random rand = new Random();
+        this.root = root;
+        this.color = color;
         position = new Vector2D(x, y);
-        velocity = new Vector2D(0, random.nextInt((15 + 1 - 8)) - 15);
+        if (root) {
+            velocity = new Vector2D(0, rand.nextInt((15 + 1 - 8)) - 15);
+        } else {
+            velocity = new Vector2D(rand.nextDouble(), rand.nextDouble());
+            int vrX = rand.nextInt((20 + 1 - 2)) - 10;
+            int vrY = rand.nextInt((20 + 1 - 2)) - 10;
+            velocity.mult(vrX, vrY);
+        }
         acceleration = new Vector2D(0, 0);
+        lifespan = 1F;
     }
 
     public void update() {
+        if (!root) {
+            velocity.mult(0.9, 0.9);
+            lifespan -= 0.02;
+        }
         velocity.add(acceleration);
         position.add(velocity);
         acceleration.mult(0, 0);
     }
 
+    public boolean isDone() { return lifespan <= 0;}
+
     public void draw(Graphics2D graphics) {
-        graphics.setColor(Color.WHITE);
+        graphics.setComposite(AlphaComposite.getInstance(
+                AlphaComposite.SRC_OVER, lifespan >= 0 ? lifespan : 0));
+        graphics.setColor(color);
         graphics.fillOval(
                 Double.valueOf(position.getX()).intValue(),
                 Double.valueOf(position.getY()).intValue(),
@@ -39,4 +60,10 @@ public class Particle {
     public void applyForce(Vector2D force) {
         acceleration.add(force);
     }
+
+    public Vector2D getVelocity() { return velocity; }
+
+    public Vector2D getPosition() { return position; }
+
+    public Color getColor() { return color; }
 }

@@ -5,18 +5,25 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.image.BufferStrategy;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 public class FireworksCanvas extends Canvas {
 
     public static final int WIDTH = 920;
     public static final int HEIGHT = 650;
 
-    private Fireworks fireworks;
+    private final Random random;
+
+    private List<Fireworks> fireworks;
     private BufferStrategy bufferStrategy;
     private boolean isRunning;
 
-    public FireworksCanvas(Fireworks fireworks) {
-        this.fireworks = fireworks;
+    public FireworksCanvas() {
+        fireworks = new ArrayList<>();
+        fireworks.add(new Fireworks());
+        random = new Random();
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
     }
 
@@ -63,13 +70,18 @@ public class FireworksCanvas extends Canvas {
             }
         }
 
-        public void update() { fireworks.update(); }
+        public void update() {
+            if (random.nextDouble() < 0.1) {
+                fireworks.add(new Fireworks());
+            }
+            fireworks.forEach(Fireworks::update);
+        }
 
         public void render() {
             Graphics2D graphics = (Graphics2D) bufferStrategy.getDrawGraphics();
             graphics.setBackground(Color.BLACK);
             graphics.clearRect(0, 0, WIDTH, HEIGHT);
-            fireworks.draw(graphics);
+            fireworks.forEach(f -> f.draw(graphics));
             graphics.dispose();
             bufferStrategy.show();
         }
