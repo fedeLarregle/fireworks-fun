@@ -22,11 +22,11 @@ public class Particle {
         this.color = color;
         position = new Vector2D(x, y);
         if (root) {
-            velocity = new Vector2D(0, rand.nextInt((15 + 1 - 8)) - 15);
+            velocity = new Vector2D(0, rand.nextInt((15 - 8) + 1) - 15);
         } else {
             velocity = new Vector2D(rand.nextDouble(), rand.nextDouble());
-            int vrX = rand.nextInt((20 + 1 - 2)) - 10;
-            int vrY = rand.nextInt((20 + 1 - 2)) - 10;
+            int vrX = rand.nextInt((40 + 1 - 2)) - 20;
+            int vrY = rand.nextInt((40 + 1 - 2)) - 20;
             velocity.mult(vrX, vrY);
         }
         acceleration = new Vector2D(0, 0);

@@ -47,7 +47,8 @@ public class Fireworks {
     }
 
     public void explode() {
-        for (int i = 0; i < 100; i++)
+        int len = random.nextInt((350 - 20) + 1) + 20;
+        for (int i = 0; i < len; i++)
             particles.add(new Particle(firework.getPosition().getX(), firework.getPosition().getY(), false, firework.getColor()));
     }
 
